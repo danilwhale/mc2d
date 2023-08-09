@@ -1,0 +1,43 @@
+[gd_scene load_steps=10 format=3 uid="uid://du57c6e4gutco"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_aa7is"]
+[ext_resource type="TileSet" uid="uid://b6smg3lbbcrbb" path="res://terrain.tres" id="2_5nsdd"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="3_u6nos"]
+[ext_resource type="TileSet" uid="uid://cvql0ugmjwsib" path="res://lightmap.tres" id="4_kd20v"]
+[ext_resource type="Script" path="res://scripts/lightmap.gd" id="5_dbs0q"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="6_bvjmf"]
+[ext_resource type="Texture2D" uid="uid://d14ocqpcctl8h" path="res://assets/hit.png" id="7_4le1t"]
+[ext_resource type="Script" path="res://scripts/render_hit.gd" id="8_aayvu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0o26r"]
+size = Vector2(15.68, 25.92)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_aa7is")
+
+[node name="TileMap" type="TileMap" parent="." node_paths=PackedStringArray("lightmap")]
+tile_set = ExtResource("2_5nsdd")
+format = 2
+script = ExtResource("3_u6nos")
+lightmap = NodePath("../LightMap")
+
+[node name="LightMap" type="TileMap" parent="." node_paths=PackedStringArray("tilemap")]
+tile_set = ExtResource("4_kd20v")
+format = 2
+script = ExtResource("5_dbs0q")
+tilemap = NodePath("../TileMap")
+
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("tilemap")]
+script = ExtResource("6_bvjmf")
+tilemap = NodePath("../TileMap")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_0o26r")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(4, 4)
+
+[node name="Hit" type="Sprite2D" parent="Player"]
+position = Vector2(0, 1)
+texture = ExtResource("7_4le1t")
+script = ExtResource("8_aayvu")
