@@ -1,17 +1,27 @@
 extends TileMap
 
+const BlockParticles = preload("res://scripts/level/block_particles.gd")
+
 @export var width := 256
 @export var height := 64
 @export var zombie_count := 10
 
-@export var lightmap: TileMap
+var lightmap = []
 
 @export var noise: FastNoiseLite
+@export var cliff_noise: FastNoiseLite
+@export var cliff_compare_noise: FastNoiseLite
 
 const ZOMBIE = preload('res://scenes/zombie.tscn')
 
+var is_generating = true
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	noise.seed = randi()
+	cliff_noise.seed = randi()
+	cliff_compare_noise.seed = randi()
+	
 	# spawn N amount of zombies
 	for z in zombie_count:
 		spawn_zombie(Vector2(randf() * width * 16, -height * 16))
@@ -23,14 +33,21 @@ func _ready():
 	# perlin noise generation
 	for i in width:
 		var j = floor(abs(noise.get_noise_1d(i)) * height) / 2 + height / 2
+		var j_cliff = floor(abs(cliff_noise.get_noise_1d(i)) * height) / 4 + height / 2
+		var j_compare = floor(abs(cliff_compare_noise.get_noise_1d(i)) * height) * 8
+		
+		if j_compare >= 128:
+			j = j_cliff
 		
 		for k in range(j, height):
-			if k >= j:
-				place_tile(Vector2i(i, k), Tiles.DIRT.tex)
-			elif k >= j + floor(abs(noise.get_noise_1d(k)) * height) / 8:
+			if k >= j + floor(abs(noise.get_noise_1d(k)) * height) / 8:
 				place_tile(Vector2i(i, k), Tiles.STONE.tex)
+			elif k >= j:
+				place_tile(Vector2i(i, k), Tiles.DIRT.tex)
 		
 		place_tile(Vector2i(i, j), Tiles.GRASS.tex)
+	
+	is_generating = false
 	
 	# update lights
 	update_lightmap()
@@ -50,6 +67,8 @@ func place_tile(point: Vector2i, type: int):
 		var x = type % 16
 		var y = type / 16
 		set_cell(0, point, 0, Vector2i(x, y))
+		if not is_generating:
+			update_lightmap()
 
 func get_tile(point: Vector2i):
 	if point.x < 0 or point.x >= width or point.y < 0 or point.y >= height:
@@ -58,9 +77,38 @@ func get_tile(point: Vector2i):
 	var cell = get_cell_atlas_coords(0, point)
 	return cell.y * width + cell.x
 
-# just shortcut to lightmap's function
+func destroy_tile(point: Vector2i):
+	var tex = get_tile(point)
+	BlockParticles.create_emit(get_parent(), map_to_local(point), tex)
+	place_tile(point, 0)
+
 func update_lightmap():
-	lightmap.generate_map(width, height)
+	# clear earlier shadows
+	clear_layer(1)
+	lightmap.clear()
+	lightmap.resize(width)
+	
+	for i in width:
+		for j in height:
+			var tex = get_cell_atlas_coords(0, Vector2i(i, j)).x
+			var tile = Tiles.get_tile(tex)
+			# if tile at (i, j) is solid
+			if tex > -1 and tile and tile.is_light_blocker():
+				# add shadow level to lightmap
+				lightmap[i] = j
+				# go down and set shadows under (i, j)
+				for k in range(j + 1, height):
+					# check if tile is not solid or tile above is not solid too
+					if  get_cell_atlas_coords(0, Vector2i(i, k)).x < 0 or \
+						get_cell_atlas_coords(0, Vector2i(i, k - 1)).x < 0:
+						# and place shadow at (i, k)
+						set_cell(1, Vector2i(i, k), 1, Vector2i(0, 0))
+				break
+
+func is_lit(x: int, y: int):
+	if x < 0 or x >= len(lightmap):
+		return true
+	return y <= lightmap[x]
 
 func load_level():
 	# if no save exists, just generate new level
@@ -79,6 +127,7 @@ func load_level():
 	update_lightmap()
 	
 	file.close()
+	is_generating = false
 	
 	return true;
 
@@ -88,10 +137,9 @@ func save_level():
 	# save level data to level.dat
 	for i in width:
 		for j in height:
-			var v = get_cell_atlas_coords(0, Vector2i(i, j))
-			var b = v.y * width + v.x
+			var b = get_tile(Vector2i(i, j))
 
-			if v.x < 0 or v.y < 0:
+			if b < 0:
 				file.store_8(0)
 			else:
 				file.store_8(b)

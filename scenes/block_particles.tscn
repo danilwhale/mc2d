@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://c3v6sxqe0psl6"]
+
+[ext_resource type="Texture2D" uid="uid://dh78be0b23et2" path="res://assets/terrain.png" id="1_rnen0"]
+[ext_resource type="Script" path="res://scripts/level/block_particles.gd" id="2_1lltn"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1a7eb"]
+particle_flag_disable_z = true
+direction = Vector3(0, 1, 0)
+gravity = Vector3(0, 125, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+collision_use_scale = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dw17l"]
+atlas = ExtResource("1_rnen0")
+region = Rect2(0, 0, 4, 4)
+
+[node name="BlockParticles" type="GPUParticles2D"]
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_1a7eb")
+texture = SubResource("AtlasTexture_dw17l")
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+script = ExtResource("2_1lltn")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

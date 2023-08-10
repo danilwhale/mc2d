@@ -47,15 +47,15 @@ func _process(delta):
 	# if position is reachable then
 	if isReachable:
 		# check if user pressed player_place and cell under position is empty
-		if Input.is_action_just_pressed("player_place") and tilemap.get_cell_atlas_coords(0, point).x < 0:
+		if Input.is_action_just_pressed("player_place") and tilemap.get_tile(point) < 0:
 			# then place cell and update lights
 			tilemap.place_tile(point, paint_tile)
 			tilemap.update_lightmap()
 		
 		# if user wants to break cell
-		if Input.is_action_just_pressed("player_break"):
+		if Input.is_action_just_pressed("player_break") and tilemap.get_tile(point) >= 0:
 			# then break cell and update lights
-			tilemap.place_tile(point, 0)
+			tilemap.destroy_tile(point)
 			tilemap.update_lightmap()
 	
 	# if user wants to reset position
@@ -78,6 +78,8 @@ func _input(event):
 			paint_tile = Tiles.COBBLESTONE.tex
 		elif event.keycode == KEY_4:
 			paint_tile = Tiles.PLANKS.tex
+		elif event.keycode == KEY_5:
+			paint_tile = Tiles.SAPLING.tex
 		
 		var x = paint_tile % 16
 		var y = paint_tile / 16

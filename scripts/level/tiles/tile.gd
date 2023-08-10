@@ -7,3 +7,6 @@ func _init(tex: int):
 
 func tick(level: TileMap, x: int, y: int):
 	pass
+
+func is_light_blocker():
+	return true

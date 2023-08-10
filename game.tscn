@@ -3,28 +3,33 @@
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_aa7is"]
 [ext_resource type="TileSet" uid="uid://b6smg3lbbcrbb" path="res://terrain.tres" id="2_5nsdd"]
 [ext_resource type="Script" path="res://scripts/level/level.gd" id="3_xxjoo"]
-[ext_resource type="TileSet" uid="uid://cvql0ugmjwsib" path="res://lightmap.tres" id="4_kd20v"]
-[ext_resource type="Script" path="res://scripts/level/lightmap.gd" id="5_3k214"]
 [ext_resource type="PackedScene" uid="uid://85j006c3pcuk" path="res://scenes/player.tscn" id="6_bf6ws"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_gcxql"]
 noise_type = 3
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mathl"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_s67s2"]
+
 [node name="Game" type="Node2D"]
 script = ExtResource("1_aa7is")
 
-[node name="TileMap" type="TileMap" parent="." node_paths=PackedStringArray("lightmap")]
+[node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("2_5nsdd")
 format = 2
+layer_0/name = "tiles"
+layer_1/name = "shadows"
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = 1
+layer_1/tile_data = PackedInt32Array()
 script = ExtResource("3_xxjoo")
-lightmap = NodePath("../LightMap")
 noise = SubResource("FastNoiseLite_gcxql")
-
-[node name="LightMap" type="TileMap" parent="." node_paths=PackedStringArray("tilemap")]
-tile_set = ExtResource("4_kd20v")
-format = 2
-script = ExtResource("5_3k214")
-tilemap = NodePath("../TileMap")
+cliff_noise = SubResource("FastNoiseLite_mathl")
+cliff_compare_noise = SubResource("FastNoiseLite_s67s2")
 
 [node name="Player" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("6_bf6ws")]
 tilemap = NodePath("../TileMap")
