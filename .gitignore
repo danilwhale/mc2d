@@ -1,2 +1,6 @@
 # Godot 4+ specific ignores
 .godot/
+
+# files that don't belong on repo
+releases/
+level.dat
