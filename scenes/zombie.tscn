@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://c7k8brjjs5idd"]
 
 [ext_resource type="Texture2D" uid="uid://bcl2h3tbchytm" path="res://assets/char.png" id="1_38nvp"]
-[ext_resource type="Script" path="res://scripts/zombie.gd" id="1_rgysp"]
+[ext_resource type="Script" path="res://scripts/character/zombie.gd" id="1_hr7wc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ffijg"]
 atlas = ExtResource("1_38nvp")
@@ -33,7 +33,7 @@ size = Vector2(10, 30)
 [node name="Zombie" type="CharacterBody2D"]
 collision_layer = 0
 collision_mask = 2
-script = ExtResource("1_rgysp")
+script = ExtResource("1_hr7wc")
 
 [node name="Head" type="Sprite2D" parent="."]
 position = Vector2(0, -5)

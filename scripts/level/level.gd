@@ -26,11 +26,11 @@ func _ready():
 		
 		for k in range(j, height):
 			if k >= j:
-				place_tile(Vector2i(i, k), Tile.DIRT)
+				place_tile(Vector2i(i, k), Tiles.DIRT.tex)
 			elif k >= j + floor(abs(noise.get_noise_1d(k)) * height) / 8:
-				place_tile(Vector2i(i, k), Tile.STONE)
+				place_tile(Vector2i(i, k), Tiles.STONE.tex)
 		
-		place_tile(Vector2i(i, j), Tile.GRASS)
+		place_tile(Vector2i(i, j), Tiles.GRASS.tex)
 	
 	# update lights
 	update_lightmap()
@@ -41,6 +41,8 @@ func spawn_zombie(point: Vector2):
 	get_parent().add_child.call_deferred(zombie)
 
 func place_tile(point: Vector2i, type: int):
+	if point.x < 0 or point.x >= width or point.y < 0 or point.y >= height:
+		return
 	# if type isn't solid, just clear cell
 	if type < 1:
 		set_cell(0, point, 0)
@@ -48,7 +50,14 @@ func place_tile(point: Vector2i, type: int):
 		var x = type % 16
 		var y = type / 16
 		set_cell(0, point, 0, Vector2i(x, y))
+
+func get_tile(point: Vector2i):
+	if point.x < 0 or point.x >= width or point.y < 0 or point.y >= height:
+		return 0
 	
+	var cell = get_cell_atlas_coords(0, point)
+	return cell.y * width + cell.x
+
 # just shortcut to lightmap's function
 func update_lightmap():
 	lightmap.generate_map(width, height)
@@ -88,6 +97,15 @@ func save_level():
 				file.store_8(b)
 	
 	file.close()
+
+func _process(delta):
+	for i in width * height / 400:
+		var x = randi_range(0, width - 1)
+		var y = randi_range(0, height - 1)
+		
+		var tile = Tiles.get_tile(get_tile(Vector2i(x, y)))
+		if tile:
+			tile.tick(self, x, y)
 
 func _notification(what):
 	# save level on exit

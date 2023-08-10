@@ -17,7 +17,7 @@ config/icon="res://assets/icon.png"
 
 [autoload]
 
-Tile="*res://scripts/tile.gd"
+Tiles="*res://scripts/level/tiles/tiles.gd"
 
 [display]
 

@@ -10,7 +10,7 @@ const JUMP_VELOCITY = -200.0
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-var paint_tile = 1
+var paint_tile = Tiles.STONE.tex
 
 func _ready():
 	resetpos()
@@ -71,13 +71,13 @@ func _input(event):
 		if not event.pressed: return
 		
 		if event.keycode == KEY_1:
-			paint_tile = Tile.STONE
+			paint_tile = Tiles.STONE.tex
 		elif event.keycode == KEY_2:
-			paint_tile = Tile.DIRT
+			paint_tile = Tiles.DIRT.tex
 		elif event.keycode == KEY_3:
-			paint_tile = Tile.COBBLESTONE
+			paint_tile = Tiles.COBBLESTONE.tex
 		elif event.keycode == KEY_4:
-			paint_tile = Tile.PLANKS
+			paint_tile = Tiles.PLANKS.tex
 		
 		var x = paint_tile % 16
 		var y = paint_tile / 16

@@ -1,15 +1,15 @@
 [gd_scene load_steps=6 format=3 uid="uid://85j006c3pcuk"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_4stiq"]
+[ext_resource type="Script" path="res://scripts/character/player.gd" id="1_as46e"]
 [ext_resource type="Texture2D" uid="uid://d14ocqpcctl8h" path="res://assets/hit.png" id="2_1wdce"]
 [ext_resource type="PackedScene" uid="uid://83ojjjb5gngy" path="res://scenes/gui.tscn" id="2_cbjiu"]
-[ext_resource type="Script" path="res://scripts/render_hit.gd" id="3_7jjd8"]
+[ext_resource type="Script" path="res://scripts/character/render_hit.gd" id="4_3yshi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o26r"]
 size = Vector2(15.68, 25.92)
 
 [node name="Player" type="CharacterBody2D"]
-script = ExtResource("1_4stiq")
+script = ExtResource("1_as46e")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0o26r")
@@ -24,4 +24,4 @@ zoom = Vector2(4, 4)
 [node name="Hit" type="Sprite2D" parent="."]
 position = Vector2(0, 1)
 texture = ExtResource("2_1wdce")
-script = ExtResource("3_7jjd8")
+script = ExtResource("4_3yshi")
