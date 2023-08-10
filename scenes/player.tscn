@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://85j006c3pcuk"]
+[gd_scene load_steps=6 format=3 uid="uid://85j006c3pcuk"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_4stiq"]
 [ext_resource type="Texture2D" uid="uid://d14ocqpcctl8h" path="res://assets/hit.png" id="2_1wdce"]
+[ext_resource type="PackedScene" uid="uid://83ojjjb5gngy" path="res://scenes/gui.tscn" id="2_cbjiu"]
 [ext_resource type="Script" path="res://scripts/render_hit.gd" id="3_7jjd8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o26r"]
@@ -15,6 +16,10 @@ shape = SubResource("RectangleShape2D_0o26r")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(4, 4)
+
+[node name="GUILayer" type="CanvasLayer" parent="Camera2D"]
+
+[node name="GUI" parent="Camera2D/GUILayer" instance=ExtResource("2_cbjiu")]
 
 [node name="Hit" type="Sprite2D" parent="."]
 position = Vector2(0, 1)

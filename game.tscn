@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://du57c6e4gutco"]
+[gd_scene load_steps=8 format=3 uid="uid://du57c6e4gutco"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_aa7is"]
 [ext_resource type="TileSet" uid="uid://b6smg3lbbcrbb" path="res://terrain.tres" id="2_5nsdd"]
@@ -6,6 +6,9 @@
 [ext_resource type="TileSet" uid="uid://cvql0ugmjwsib" path="res://lightmap.tres" id="4_kd20v"]
 [ext_resource type="Script" path="res://scripts/lightmap.gd" id="5_dbs0q"]
 [ext_resource type="PackedScene" uid="uid://85j006c3pcuk" path="res://scenes/player.tscn" id="6_bf6ws"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gcxql"]
+noise_type = 3
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_aa7is")
@@ -15,6 +18,7 @@ tile_set = ExtResource("2_5nsdd")
 format = 2
 script = ExtResource("3_u6nos")
 lightmap = NodePath("../LightMap")
+noise = SubResource("FastNoiseLite_gcxql")
 
 [node name="LightMap" type="TileMap" parent="." node_paths=PackedStringArray("tilemap")]
 tile_set = ExtResource("4_kd20v")

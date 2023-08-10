@@ -2,4 +2,4 @@
 .godot/
 
 releases/
-level.dat
+*.dat

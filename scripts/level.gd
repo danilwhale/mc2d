@@ -6,35 +6,48 @@ extends TileMap
 
 @export var lightmap: TileMap
 
+@export var noise: FastNoiseLite
+
 const ZOMBIE = preload('res://scenes/zombie.tscn')
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# spawn N amount of zombies
 	for z in zombie_count:
-		var zombie = ZOMBIE.instantiate()
-		zombie.position = Vector2(randf() * width * 16, -height * 16)
-		get_parent().add_child.call_deferred(zombie)
+		spawn_zombie(Vector2(randf() * width * 16, -height * 16))
 	
 	# if level is exists and was loaded, don't generate
 	if load_level():
 		return
 	
-	# very basic generation
+	# perlin noise generation
 	for i in width:
-		for j in height:
-			place_tile(Vector2i(i, j), 1 if j >= height / 2 else 0)
+		var j = floor(abs(noise.get_noise_1d(i)) * height) / 2 + height / 2
+		
+		for k in range(j, height):
+			if k >= j:
+				place_tile(Vector2i(i, k), Tile.DIRT)
+			elif k >= j + floor(abs(noise.get_noise_1d(k)) * height) / 8:
+				place_tile(Vector2i(i, k), Tile.STONE)
+		
+		place_tile(Vector2i(i, j), Tile.GRASS)
 	
 	# update lights
 	update_lightmap()
+
+func spawn_zombie(point: Vector2):
+	var zombie = ZOMBIE.instantiate()
+	zombie.position = point
+	get_parent().add_child.call_deferred(zombie)
 
 func place_tile(point: Vector2i, type: int):
 	# if type isn't solid, just clear cell
 	if type < 1:
 		set_cell(0, point, 0)
 	else:
-		# replicating rubydung-y style by setting grass tile only at half height y
-		set_cell(0, point, 0, Vector2i(0, 0) if point.y == height / 2 else Vector2i(1, 0))
+		var x = type % 16
+		var y = type / 16
+		set_cell(0, point, 0, Vector2i(x, y))
 	
 # just shortcut to lightmap's function
 func update_lightmap():
@@ -66,7 +79,13 @@ func save_level():
 	# save level data to level.dat
 	for i in width:
 		for j in height:
-			file.store_8(0 if get_cell_atlas_coords(0, Vector2i(i, j)).x < 0 else 1)
+			var v = get_cell_atlas_coords(0, Vector2i(i, j))
+			var b = v.y * width + v.x
+
+			if v.x < 0 or v.y < 0:
+				file.store_8(0)
+			else:
+				file.store_8(b)
 	
 	file.close()
 
