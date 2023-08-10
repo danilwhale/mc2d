@@ -1,16 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://du57c6e4gutco"]
+[gd_scene load_steps=7 format=3 uid="uid://du57c6e4gutco"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_aa7is"]
 [ext_resource type="TileSet" uid="uid://b6smg3lbbcrbb" path="res://terrain.tres" id="2_5nsdd"]
 [ext_resource type="Script" path="res://scripts/level.gd" id="3_u6nos"]
 [ext_resource type="TileSet" uid="uid://cvql0ugmjwsib" path="res://lightmap.tres" id="4_kd20v"]
 [ext_resource type="Script" path="res://scripts/lightmap.gd" id="5_dbs0q"]
-[ext_resource type="Script" path="res://scripts/player.gd" id="6_bvjmf"]
-[ext_resource type="Texture2D" uid="uid://d14ocqpcctl8h" path="res://assets/hit.png" id="7_4le1t"]
-[ext_resource type="Script" path="res://scripts/render_hit.gd" id="8_aayvu"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0o26r"]
-size = Vector2(15.68, 25.92)
+[ext_resource type="PackedScene" uid="uid://85j006c3pcuk" path="res://scenes/player.tscn" id="6_bf6ws"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_aa7is")
@@ -27,17 +22,5 @@ format = 2
 script = ExtResource("5_dbs0q")
 tilemap = NodePath("../TileMap")
 
-[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("tilemap")]
-script = ExtResource("6_bvjmf")
+[node name="Player" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("6_bf6ws")]
 tilemap = NodePath("../TileMap")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource("RectangleShape2D_0o26r")
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(4, 4)
-
-[node name="Hit" type="Sprite2D" parent="Player"]
-position = Vector2(0, 1)
-texture = ExtResource("7_4le1t")
-script = ExtResource("8_aayvu")

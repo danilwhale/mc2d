@@ -9,7 +9,8 @@ const JUMP_VELOCITY = -200.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready():
-	resetpos()
+	#resetpos()
+	pass
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -27,21 +28,33 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
-	var point = tilemap.local_to_map(get_global_mouse_position())
+	# convert mouse position to tilemap position
+	var point = tilemap.local_to_map(get_global_mouse_position()) 
+	# check if it is reachable
 	var isReachable = get_global_mouse_position().distance_to(position) < (16 * 6)
+	
+	# move hit preview position to world cell position
 	$Hit.position = to_local(tilemap.map_to_local(point))
+	# hide it if position is not reachable
 	$Hit.visible = isReachable;
 	
+	# if position is reachable then
 	if isReachable:
+		# check if user pressed player_place and cell under position is empty
 		if Input.is_action_just_pressed("player_place") and tilemap.get_cell_atlas_coords(0, point).x < 0:
+			# then place cell and update lights
 			tilemap.place_tile(point, 1)
 			tilemap.update_lightmap()
-	
+		
+		# if user wants to break cell
 		if Input.is_action_just_pressed("player_break"):
+			# then break cell and update lights
 			tilemap.place_tile(point, 0)
 			tilemap.update_lightmap()
 	
+	# if user wants to reset position
 	if Input.is_action_just_pressed("player_resetpos"):
+		# we just reset player position :)
 		resetpos()
 
 	move_and_slide()
