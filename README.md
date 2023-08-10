@@ -1,2 +1,2 @@
 # mc2d
- a clone of old minecraft versions on godot 4
+## the clone of old minecraft versions, but in 2d and on godot 4
