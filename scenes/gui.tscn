@@ -36,6 +36,6 @@ offset_right = 53.0
 offset_bottom = 31.0
 theme_override_fonts/font = ExtResource("2_l5lds")
 theme_override_font_sizes/font_size = 24
-text = "0.0.1a
+text = "%s
 %d fps"
 script = ExtResource("3_g66wj")
