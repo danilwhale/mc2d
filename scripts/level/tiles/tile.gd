@@ -10,3 +10,6 @@ func tick(level: TileMap, x: int, y: int):
 
 func is_light_blocker():
 	return true
+
+func is_solid():
+	return true

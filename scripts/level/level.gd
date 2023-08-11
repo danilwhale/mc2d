@@ -88,27 +88,31 @@ func update_lightmap():
 	lightmap.clear()
 	lightmap.resize(width)
 	
-	for i in width:
-		for j in height:
-			var tex = get_cell_atlas_coords(0, Vector2i(i, j)).x
-			var tile = Tiles.get_tile(tex)
-			# if tile at (i, j) is solid
-			if tex > -1 and tile and tile.is_light_blocker():
-				# add shadow level to lightmap
-				lightmap[i] = j
-				# go down and set shadows under (i, j)
-				for k in range(j + 1, height):
-					# check if tile is not solid or tile above is not solid too
-					if  get_cell_atlas_coords(0, Vector2i(i, k)).x < 0 or \
-						get_cell_atlas_coords(0, Vector2i(i, k - 1)).x < 0:
-						# and place shadow at (i, k)
-						set_cell(1, Vector2i(i, k), 1, Vector2i(0, 0))
-				break
+	for x in width:
+		var y = 0
+		while y < height and not is_light_blocker(x, y):
+			y += 1
+		
+		for y1 in range(y + 1, height):
+			if not is_light_blocker(x, y1 - 1) and is_solid(x, y1):
+				set_cell(1, Vector2i(x, y1), 1, Vector2i(0, 0))
+				
+			
+		lightmap[x] = y
+		
 
 func is_lit(x: int, y: int):
 	if x < 0 or x >= len(lightmap):
 		return true
 	return y <= lightmap[x]
+
+func is_light_blocker(x: int, y: int):
+	var tile = Tiles.get_tile(get_tile(Vector2i(x, y)))
+	return tile != null and tile.is_light_blocker()
+
+func is_solid(x: int, y: int):
+	var tile = Tiles.get_tile(get_tile(Vector2i(x, y)))
+	return tile != null and tile.is_solid()
 
 func load_level():
 	# if no save exists, just generate new level
