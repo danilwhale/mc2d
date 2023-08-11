@@ -1,7 +1,7 @@
 # mc2d
 ## the clone of old minecraft versions, but in 2d and on godot 4
 
-### Latest version: rd-161348
+### Latest version: c0.0.1a
 
 > ### Classic
 | Version      | Status             | Changes             |
@@ -11,6 +11,9 @@
 | c0.0.9a      | :x:                | RMB Switch, can't place blocks inside player |
 | c0.0.12a     | :x:                | Infinite ocean, F change view distance, N new level, swimming, bedrock, water, lava, better generation |
 | c0.0.13a     | :x:                | Line selection, pause, large world, no zombie spawn at generating, updated textures |
+| c0.0.14a     | :x:                | New generation, ores, trees, sand, gravel, updated textures |
+| c0.0.14a_04  | :x:                | Can set spawn point by Enter |
+| c0.0.14a_08  | :x:                | Leaves shape, lava brightness |
 
 > ### Pre-classic
 | Version      | Status             | Changes             |
