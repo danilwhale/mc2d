@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://83ojjjb5gngy"]
+[gd_scene load_steps=5 format=3 uid="uid://83ojjjb5gngy"]
 
 [ext_resource type="Texture2D" uid="uid://dh78be0b23et2" path="res://assets/terrain.png" id="1_7j6we"]
 [ext_resource type="FontFile" uid="uid://di7ckiqy4h5x5" path="res://assets/font.otf" id="2_l5lds"]
+[ext_resource type="Script" path="res://scripts/gui/info_label.gd" id="3_g66wj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vnayp"]
 atlas = ExtResource("1_7j6we")
@@ -27,9 +28,14 @@ offset_bottom = 96.0
 grow_horizontal = 0
 texture = SubResource("AtlasTexture_vnayp")
 
-[node name="Label" type="Label" parent="."]
+[node name="InfoLabel" type="Label" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 53.0
+offset_bottom = 31.0
 theme_override_fonts/font = ExtResource("2_l5lds")
-text = "0.0.1a"
+theme_override_font_sizes/font_size = 24
+text = "0.0.1a
+%d fps"
+script = ExtResource("3_g66wj")

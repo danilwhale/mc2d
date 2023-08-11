@@ -18,6 +18,7 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 Tiles="*res://scripts/level/tiles/tiles.gd"
+Game="*res://scripts/game.gd"
 
 [display]
 
